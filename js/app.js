@@ -13,6 +13,7 @@ var previousRandom = [];
 function Pic(name) {
   this.name = name;
   this.timesChosen = 0;
+  this.timesShown = 0;
   this.path =`img/${name}.jpg`;
   allPics.push(this);
 }
@@ -28,7 +29,7 @@ console.table(allPicNames);
 // Holding Array for three random numbers
 var randomNumberArray = [];
 
-// Create three random numbers
+// Create three random numbers and append to number of times shown
 function getRandomNumber() {
   previousRandom = randomNumberArray;
   randomNumberArray = [];
@@ -36,6 +37,7 @@ function getRandomNumber() {
     var randomNumber = Math.floor(allPics.length * Math.random());
     if (randomNumberArray.indexOf(randomNumber) === -1 && previousRandom.indexOf(randomNumber) === -1) {
       randomNumberArray.push(randomNumber);
+      allPics[randomNumber].timesShown++;
     }
   }
   console.log('Previous ', previousRandom);
@@ -44,6 +46,8 @@ function getRandomNumber() {
 
 getRandomNumber();
 console.table(randomNumberArray);
+
+
 
 // Function to show a random picture in each field
 function showRandomPic() {
@@ -84,11 +88,10 @@ function handlePicClick(event) {
     picSelectionEl.removeEventListener('click', handlePicClick);
     for (var j = 0; j < allPics.length; j++) {
       var paraEl = document.createElement('p');
-      var textEl = document.createTextNode (`${allPics[j].name} was clicked ${allPics[j].timesChosen} times`);
+      var textEl = document.createTextNode (`${allPics[j].name} was clicked ${allPics[j].timesChosen} times, and was shown ${allPics[j].timesShown} times`);
       paraEl.appendChild(textEl);
       var divEl = document.getElementById('final-list');
       divEl.appendChild(paraEl);
     }
-    console.log(paraEl.appendChild(textEl));
   }
 }
