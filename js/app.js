@@ -47,8 +47,6 @@ function getRandomNumber() {
 getRandomNumber();
 console.table(randomNumberArray);
 
-
-
 // Function to show a random picture in each field
 function showRandomPic() {
   picLeft.src = allPics[randomNumberArray[0]].path;
@@ -78,20 +76,152 @@ function handlePicClick(event) {
       console.log(`The ${allPics[i].name} has been selected ${allPics[i].timesChosen} times`);
     }
   }
+
   getRandomNumber();
   showRandomPic();
   totalTimesChosen++;
   if (totalTimesChosen === 25) {
     alert('Thank you for providing your input! Your votes have been counted and forward to our marketing department for analysis. Please step away from the machine and proceed to the exit. Have a great day!');
     document.getElementById('pictures').innerHTML = '';
+    updateChartArrays();
+    drawChart();
     console.table(allPics);
     picSelectionEl.removeEventListener('click', handlePicClick);
-    for (var j = 0; j < allPics.length; j++) {
-      var paraEl = document.createElement('p');
-      var textEl = document.createTextNode (`${allPics[j].name} was clicked ${allPics[j].timesChosen} times, and was shown ${allPics[j].timesShown} times`);
-      paraEl.appendChild(textEl);
-      var divEl = document.getElementById('final-list');
-      divEl.appendChild(paraEl);
-    }
+    // ++++ INTERNAL FOR LOOP THAT PRINTS OUT FINAL LIST +++ //
+    // for (var j = 0; j < allPics.length; j++) {
+    //   var paraEl = document.createElement('p');
+    //   var textEl = document.createTextNode (`${allPics[j].name} | Appearances: ${allPics[j].timesShown} | Votes: ${allPics[j].timesChosen}`);
+    //   paraEl.appendChild(textEl);
+    //   var divEl = document.getElementById('final-list');
+    //   divEl.appendChild(paraEl);
+    // }
   }
 }
+
+// ------ Function to update chart arrays ------- //
+
+var picVotes = [];
+var picAppearances = [];
+var picLabels = [];
+
+function updateChartArrays() {
+  for (var i = 0; i < allPics.length; i++) {
+    picLabels[i] = allPics[i].name;
+    picVotes[i] = allPics[i].timesChosen;
+    picAppearances[i] = allPics[i].timesShown;
+  }
+  console.log(picLabels);
+  console.log(picVotes);
+}
+
+// ----------- Chart creation ----------------- //
+function drawChart() {
+  var ctx = document.getElementById('busmall-chart').getContext('2d');
+  Chart.defaults.global.defaultFontColor = 'white';
+  new Chart(ctx, {
+    type: 'horizontalBar',
+    data: {
+      labels: picLabels,
+      datasets: [{
+        label: '# of Votes',
+        data: picVotes,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255,99,132,1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(255,99,132,1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(255,99,132,1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(255,99,132,1)',
+          'rgba(54, 162, 235, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+}
+
+// var busMallData = {
+//   labels: picLabels, // titles array we declared earlier
+//   datasets: [{
+//     data: picVotes, // votes array we declared earlier
+//     backgroundColor: [
+//       'bisque',
+//       'darkgray',
+//       'burlywood',
+//       'lightblue',
+//       'navy'
+//     ],
+//   }]
+// };
+
+
+// function drawChart() {
+//   var ctx = document.getElementById('busmall-chart').getContext('2d');
+//   new Chart(ctx, {
+//     type: 'Bar',
+//     data: {
+
+//     options: {
+//       responsive: false,
+//       animation: {
+//         duration: 1000,
+//         easing: 'easeOut'
+//       }
+//     },
+//     scales: {
+//       yAxes: [{
+//         ticks: {
+//           max: 10,
+//           min: 0,
+//           stepSize: 1.0
+//         }
+//       }]
+//     }
+//   });
+// }
+
+// drawChart();
