@@ -5,7 +5,7 @@ var picCenter = document.getElementById('pic-center');
 var picRight = document.getElementById('pic-right');
 
 var allPics = [];
-var totalTimesChosen = 0;
+var totalSetsClicked = 0;
 
 var previousRandom = [];
 
@@ -44,10 +44,24 @@ function getRandomNumber() {
   console.log('Current ', randomNumberArray);
 }
 
-getRandomNumber();
-console.table(randomNumberArray);
+// --------- CREATE LOCAL STORAGE OF VALUES -------------- //
+var allStoredPics = JSON.parse(localStorage.getItem('voteCounter'));
 
-// Function to show a random picture in each field
+if (localStorage.getItem('voteCounter') === null) {
+  getRandomNumber();
+  console.table(randomNumberArray);
+  showRandomPic();
+} else {
+  for (var i = 0; i < allPics.length; i++) {
+    allPics[i].timesChosen = allStoredPics[i];
+  }
+  totalSetsClicked = JSON.parse(localStorage.getItem('totalClickCount'));
+  getRandomNumber();
+  console.table(randomNumberArray);
+  showRandomPic();
+}
+
+// Function that displays a random picture in each field
 function showRandomPic() {
   picLeft.src = allPics[randomNumberArray[0]].path;
   picLeft.alt = allPics[randomNumberArray[0]].name;
@@ -59,8 +73,6 @@ function showRandomPic() {
   picRight.alt = allPics[randomNumberArray[2]].name;
   picRight.title = allPics[randomNumberArray[2]].name;
 }
-
-showRandomPic();
 
 // Image selection event handling
 var picSelectionEl = document.getElementById('pictures');
@@ -77,13 +89,17 @@ function handlePicClick(event) {
     }
   }
 
+  if (totalSetsClicked > 24) {
+    totalSetsClicked = 0;
+  } else {
+    totalSetsClicked++;
+  }
+  updateChartArrays();
   getRandomNumber();
   showRandomPic();
-  totalTimesChosen++;
-  if (totalTimesChosen === 25) {
+  if (totalSetsClicked === 25) {
     alert('Thank you for providing your input! Your votes have been counted and forward to our marketing department for analysis. Please step away from the machine and proceed to the exit. Have a great day!');
     document.getElementById('pictures').innerHTML = '';
-    updateChartArrays();
     drawChart();
     console.table(allPics);
     picSelectionEl.removeEventListener('click', handlePicClick);
@@ -109,12 +125,16 @@ function updateChartArrays() {
     picLabels[i] = allPics[i].name;
     picVotes[i] = allPics[i].timesChosen;
     picAppearances[i] = allPics[i].timesShown;
+    localStorage.setItem('voteCounter', JSON.stringify(picVotes));
+    localStorage.setItem('totalClickCount', JSON.stringify(totalSetsClicked));
+    localStorage.setItem('totalAppearances', JSON.stringify(picAppearances));
   }
   console.log(picLabels);
   console.log(picVotes);
 }
 
-// ----------- Chart creation ----------------- //
+
+// ----------- Chart creation ------------- //
 function drawChart() {
   var ctx = document.getElementById('busmall-chart').getContext('2d');
   Chart.defaults.global.defaultFontColor = 'white';
@@ -225,3 +245,8 @@ function drawChart() {
 // }
 
 // drawChart();
+
+
+
+
+
