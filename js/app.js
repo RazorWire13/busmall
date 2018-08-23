@@ -14,13 +14,13 @@ function Pic(name) {
   this.name = name;
   this.timesChosen = 0;
   this.timesShown = 0;
-  this.path =`img/${name}.jpg`;
+  this.path = `img/${name}.jpg`;
   allPics.push(this);
 }
 
 var allPicNames = ['r2d2-bag', 'banana-slicer', 'ipad-tp-roll', 'open-toed-boots', 'breakfast-maker', 'meatball-bubblegum', 'round-chair', 'cthulhu-figure', 'dog-ducklips', 'dragon-meat', 'utensil-pen', 'pet-sweep', 'pizza-scissors', 'shark-bag', 'kid-sweeper', 'tauntaun-bag', 'unicorn-meat', 'tentacle-usb', 'reverse-water-can', 'wine-glass'];
 
-allPicNames.forEach(function(picName) {
+allPicNames.forEach(function (picName) {
   new Pic(picName);
 });
 
@@ -82,7 +82,7 @@ picSelectionEl.addEventListener('click', handlePicClick);
 function handlePicClick(event) {
   var clickedPic = event.target.alt;
   console.log(clickedPic);
-  for (var i = 0; i < allPics.length;i++) {
+  for (var i = 0; i < allPics.length; i++) {
     if (clickedPic === allPics[i].name) {
       allPics[i].timesChosen++;
       console.log(`The ${allPics[i].name} has been selected ${allPics[i].timesChosen} times`);
@@ -133,7 +133,6 @@ function updateChartArrays() {
   console.log(picVotes);
 }
 
-
 // ----------- Chart creation ------------- //
 function drawChart() {
   var ctx = document.getElementById('busmall-chart').getContext('2d');
@@ -143,7 +142,6 @@ function drawChart() {
     data: {
       labels: picLabels,
       datasets: [{
-        label: '# of Votes',
         data: picVotes,
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
@@ -193,60 +191,16 @@ function drawChart() {
       }]
     },
     options: {
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: true
-          }
-        }]
-      }
+    },
+    scales: {
+      yAxes: [{
+        ticks: {
+          max: 30,
+          min: 0,
+          stepSize: 1.0,
+          beginAtZero: true
+        }
+      }]
     }
   });
 }
-
-// var busMallData = {
-//   labels: picLabels, // titles array we declared earlier
-//   datasets: [{
-//     data: picVotes, // votes array we declared earlier
-//     backgroundColor: [
-//       'bisque',
-//       'darkgray',
-//       'burlywood',
-//       'lightblue',
-//       'navy'
-//     ],
-//   }]
-// };
-
-
-// function drawChart() {
-//   var ctx = document.getElementById('busmall-chart').getContext('2d');
-//   new Chart(ctx, {
-//     type: 'Bar',
-//     data: {
-
-//     options: {
-//       responsive: false,
-//       animation: {
-//         duration: 1000,
-//         easing: 'easeOut'
-//       }
-//     },
-//     scales: {
-//       yAxes: [{
-//         ticks: {
-//           max: 10,
-//           min: 0,
-//           stepSize: 1.0
-//         }
-//       }]
-//     }
-//   });
-// }
-
-// drawChart();
-
-
-
-
-
